@@ -208,9 +208,8 @@ public:
     virtual bool IsSupportedForNetworking() const override { return true; }
 
     virtual int32 GetFunctionCallspace(UFunction* Function, FFrame* Stack) override {
-        int32 Callspace = FunctionCallspace::Local;
-        if (UObject* Outer = GetOuter()) Callspace = Outer->GetFunctionCallspace(Function, Stack);
-        return Callspace;
+        if (UObject* Outer = GetOuter()) return Outer->GetFunctionCallspace(Function, Stack);
+        return FunctionCallspace::Local;
     }
 
     virtual bool CallRemoteFunction(UFunction* Function, void* Parms, FOutParmRec* OutParms, FFrame* Stack) override {
