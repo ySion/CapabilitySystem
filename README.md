@@ -5,6 +5,23 @@
   <u><a href="README_CN.md">中文</a></u>
 </p>
 
+---
+
+## ⚠️ Pre-Usage Notes
+
+Before fully adopting the **Capability System**, it’s important to understand its runtime characteristics.  
+If using an *all-in CapabilitySystem* configuration is not a reasonable design choice for your project, note that this framework operates as an **active-driven behaviour system**.  
+When a large number of actors each hold multiple *tick-enabled capabilities*, the cumulative CPU cost can become significant.  
+For optimal performance and scalability, it is **strongly recommended** to integrate the Capability System together with an **event-driven behaviour system**, so that time-critical or continuous updates are handled efficiently while less-frequent logic is triggered by events.
+
+In terms of **network synchronization**, this system intentionally employs some *hack-style (trick-based)* synchronization methods.  
+Capability execution is primarily driven by **Conditions**, which also represent and include the **BlockTags** used to block interactions between capabilities.  
+Because of the inherent latency of network transmission, the activation and deactivation of capabilities across the network may be **delayed or deferred** relative to local states.  
+
+Therefore, it is encouraged to use capabilities mainly as **local active-driven logic units**, and combine them with a **network-synchronized, event-push-based behaviour layer** to achieve a balanced and responsive experience.
+
+---
+
 ## Overview
 Capability System is a lightweight gameplay framework that lets you assemble actor behaviour from small, network-aware modules called *capabilities*. It is engine-version agnostic: the same core works whether your project leans on C++, Blueprints, UnrealSharp, or AngelScript. Each capability can decide where it executes (server, owning client, every client, etc.), access replicated data components, and optionally manage Enhanced Input bindings. Designers can work entirely in AngelScript or UnrealSharp while sharing the same lifecycle and networking rules as C++ counterparts.
 

@@ -5,6 +5,24 @@
   <u><b>&gt; 中文 &lt;</b></u>
 </p>
 
+## 使用前请注意
+
+---
+
+在全面使用 **Capability System** 之前，请先了解其运行特性。  
+若「全部系统逻辑均依赖 CapabilitySystem」并非合理的设计选择，需要注意此框架本质上是一个**主动驱动式的行为系统**。  
+当大量 Actor 含有多个启用 Tick 的 Capability 时，CPU 开销会迅速累积，影响性能。  
+为获得最佳体验，**建议将 Capability System 与事件推送式（Event-Driven）的行为系统结合使用**，让持续性逻辑与触发性逻辑分工明确，从而实现高效运行与良好的扩展性。
+
+在**网络同步**层面，该系统包含部分技巧性（Hack-Style）的实现。  
+驱动 Capability 运作的核心机制是 **Condition**，它同时代表并包含用于在不同 Capability 之间互斥的 **BlockTag**。  
+由于网络延迟的存在，跨网络同步的 Capability 状态变化（如激活或停用）会出现一定的**延后**。  
+
+因此，推荐的使用方式是：  
+将 Capability 作为**本地主动驱动系统的核心逻辑单元**，并结合**网络事件推送式的行为系统**来实现跨端协同，从而获得平衡且流畅的体验。
+
+---
+
 ## 概述（Overview）
 Capability System 是一套轻量的玩法框架，让你把 Actor 的行为拆分成小而独立、可联网的模块（capabilities）再组合使用。它与引擎版本无关：无论你主要使用 C++、Blueprints、UnrealSharp 还是 AngelScript，都能复用同一套核心。每个能力都可以决定自己的执行侧（例如：服务器、拥有者客户端、所有客户端等）、访问可复制（replicated）的数据组件，并且可以选择管理 Enhanced Input 的绑定。设计师可以完全用 AngelScript 或 UnrealSharp 进行工作，同时遵循和 C++ 相同的生命周期与网络规则。
 
